@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mleblanc <mleblanc@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/08 20:11:44 by mleblanc          #+#    #+#             */
-/*   Updated: 2021/05/12 18:51:06 by mleblanc         ###   ########.fr       */
+/*   Updated: 2021/05/12 18:51:25 by mleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 #include <unistd.h>
 #include <stdlib.h>
 
@@ -105,25 +105,25 @@ static char	*get_line(char **file_buffer, char *newline)
 
 int	get_next_line(int fd, char **line)
 {
-	static char	*file_buffers = NULL;
+	static char	*file_buffers[MAX_FD] = {};
 	char		*newline;
 	int			code;
 
 	if (fd < 0 || fd >= MAX_FD || !line)
 		return (-1);
 	newline = NULL;
-	if (file_buffers)
-		newline = ft_strchr(file_buffers, '\n');
+	if (file_buffers[fd])
+		newline = ft_strchr(file_buffers[fd], '\n');
 	while (!newline)
 	{
-		code = read_file(&file_buffers, fd);
+		code = read_file(&file_buffers[fd], fd);
 		if (code < 1)
 			break ;
-		newline = ft_strchr(file_buffers, '\n');
+		newline = ft_strchr(file_buffers[fd], '\n');
 	}
 	if (code < 0)
 		return (code);
-	*line = get_line(&file_buffers, newline);
+	*line = get_line(&file_buffers[fd], newline);
 	if (code == 0 && !line)
 		return (0);
 	if (!*line)

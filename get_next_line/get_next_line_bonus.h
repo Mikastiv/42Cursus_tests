@@ -1,20 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_toupper.c                                       :+:      :+:    :+:   */
+/*   get_next_line_bonus.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mleblanc <mleblanc@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/05 09:53:47 by mleblanc          #+#    #+#             */
-/*   Updated: 2021/05/05 10:01:44 by mleblanc         ###   ########.fr       */
+/*   Created: 2021/05/08 20:03:40 by mleblanc          #+#    #+#             */
+/*   Updated: 2021/05/12 18:50:26 by mleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
 
-int	ft_toupper(int c)
-{
-	if (ft_islower(c))
-		return (c - ('a' - 'A'));
-	return (c);
-}
+#include <stddef.h>
+
+int		get_next_line(int fd, char **line);
+char	*ft_strchr(const char *s, int c);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
+char	*ft_strjoin(char const *s1, char const *s2);
+
+#endif
