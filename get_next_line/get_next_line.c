@@ -6,7 +6,7 @@
 /*   By: mleblanc <mleblanc@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/12 22:07:54 by mleblanc          #+#    #+#             */
-/*   Updated: 2021/05/13 15:13:46 by mleblanc         ###   ########.fr       */
+/*   Updated: 2021/05/13 15:44:34 by mleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,25 +42,33 @@ static char	*ft_strchr(const char *s, int c)
 
 static int	read_file(char	**file_buffer, int fd)
 {
-	char		read_buffer[BUFFER_SIZE + 1];
+	char		*read_buffer;
 	char		*tmp;
 	ssize_t		bytes;
 
+	read_buffer = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!read_buffer)
+		return (-1);
 	bytes = read(fd, read_buffer, BUFFER_SIZE);
+	if (bytes < 0)
+		free(read_buffer);
 	if (bytes < 0)
 		return (-1);
 	read_buffer[bytes] = '\0';
 	tmp = ft_strjoin(*file_buffer, read_buffer);
 	if (!tmp)
+		free(read_buffer);
+	if (!tmp)
 		return (-1);
 	free(*file_buffer);
+	free(read_buffer);
 	*file_buffer = tmp;
 	if (bytes < BUFFER_SIZE)
 		return (0);
 	return (1);
 }
 
-static int	get_line(char **buffer, char **line, int code)
+static int	get_line(char **buffer, char **line)
 {
 	char	*tmp;
 	char	*newline;
@@ -76,7 +84,7 @@ static int	get_line(char **buffer, char **line, int code)
 	{
 		free(*buffer);
 		*buffer = NULL;
-		return (code);
+		return (0);
 	}
 	else
 	{
@@ -107,7 +115,9 @@ int	get_next_line(int fd, char **line)
 	}
 	if (code < 0)
 		return (-1);
-	code = get_line(&buffer, line, code);
+	code = get_line(&buffer, line);
+	if (code < 0)
+		return (-1);
 	if (code == 0)
 		return (0);
 	return (1);
