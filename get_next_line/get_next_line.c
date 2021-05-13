@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mleblanc <mleblanc@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/08 20:11:44 by mleblanc          #+#    #+#             */
-/*   Updated: 2021/05/12 20:16:02 by mleblanc         ###   ########.fr       */
+/*   Created: 2021/05/12 22:07:54 by mleblanc          #+#    #+#             */
+/*   Updated: 2021/05/13 15:13:46 by mleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 
 #define MAX_FD 8192
 
-static size_t	ft_strlen(const char *s)
+size_t	ft_strlen(const char *s)
 {
 	size_t	len;
 
@@ -28,6 +28,16 @@ static size_t	ft_strlen(const char *s)
 	while (s[len])
 		len++;
 	return (len);
+}
+
+static char	*ft_strchr(const char *s, int c)
+{
+	while (*s != (unsigned char)c)
+	{
+		if (*s++ == '\0')
+			return (NULL);
+	}
+	return ((char *)s);
 }
 
 static int	read_file(char	**file_buffer, int fd)
@@ -38,89 +48,66 @@ static int	read_file(char	**file_buffer, int fd)
 
 	bytes = read(fd, read_buffer, BUFFER_SIZE);
 	if (bytes < 0)
-		return (bytes);
-	read_buffer[bytes] = '\0';
-	tmp = *file_buffer;
-	if (!*file_buffer)
-		*file_buffer = ft_substr(read_buffer, 0, BUFFER_SIZE);
-	else
-		*file_buffer = ft_strjoin(*file_buffer, read_buffer);
-	if (!*file_buffer)
-	{
-		*file_buffer = tmp;
 		return (-1);
-	}
-	free(tmp);
-	if (bytes > 0)
-		return (1);
-	return (0);
+	read_buffer[bytes] = '\0';
+	tmp = ft_strjoin(*file_buffer, read_buffer);
+	if (!tmp)
+		return (-1);
+	free(*file_buffer);
+	*file_buffer = tmp;
+	if (bytes < BUFFER_SIZE)
+		return (0);
+	return (1);
 }
 
-static char	*extract_line(char **file_buffer, size_t nl_index)
+static int	get_line(char **buffer, char **line, int code)
 {
 	char	*tmp;
-	char	*line;
-	size_t	len;
+	char	*newline;
 
-	line = ft_substr(*file_buffer, 0, nl_index);
-	if (!line)
-		return (NULL);
-	tmp = *file_buffer;
-	len = ft_strlen(*file_buffer + nl_index + 1);
-	*file_buffer = ft_substr(*file_buffer, nl_index + 1, len);
-	if (!*file_buffer)
+	newline = ft_strchr(*buffer, '\n');
+	if (!newline)
+		*line = ft_strdup(*buffer);
+	else
+		*line = ft_substr(*buffer, 0, newline - *buffer);
+	if (!*line)
+		return (-1);
+	if (!newline)
 	{
-		*file_buffer = tmp;
-		return (NULL);
-	}
-	free(tmp);
-	return (line);
-}
-
-static char	*get_line(char **file_buffer, char *newline)
-{
-	char	*line;
-
-	if (newline)
-	{
-		line = extract_line(file_buffer, newline - *file_buffer);
-		if (!line)
-			return (NULL);
+		free(*buffer);
+		*buffer = NULL;
+		return (code);
 	}
 	else
 	{
-		line = ft_substr(*file_buffer, 0, ft_strlen(*file_buffer));
-		if (!line)
-			return (NULL);
-		free(*file_buffer);
-		*file_buffer = NULL;
+		tmp = ft_substr(*buffer, ft_strlen(*line) + 1, BUFFER_SIZE);
+		if (!tmp)
+			return (-1);
+		free(*buffer);
+		*buffer = tmp;
+		return (1);
 	}
-	return (line);
 }
 
 int	get_next_line(int fd, char **line)
 {
-	static char	*file_buffers = NULL;
-	char		*newline;
+	static char	*buffer = NULL;
 	int			code;
 
 	if (fd < 0 || fd >= MAX_FD || !line)
 		return (-1);
-	newline = NULL;
-	if (file_buffers)
-		newline = ft_strchr(file_buffers, '\n');
-	while (!newline)
+	if (!buffer)
+		buffer = ft_strdup("");
+	code = 1;
+	while (!ft_strchr(buffer, '\n'))
 	{
-		code = read_file(&file_buffers, fd);
+		code = read_file(&buffer, fd);
 		if (code < 1)
 			break ;
-		newline = ft_strchr(file_buffers, '\n');
 	}
 	if (code < 0)
-		return (code);
-	*line = get_line(&file_buffers, newline);
-	if (!*line)
 		return (-1);
+	code = get_line(&buffer, line, code);
 	if (code == 0)
 		return (0);
 	return (1);
