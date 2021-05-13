@@ -6,7 +6,7 @@
 /*   By: mleblanc <mleblanc@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/08 20:11:44 by mleblanc          #+#    #+#             */
-/*   Updated: 2021/05/12 18:51:06 by mleblanc         ###   ########.fr       */
+/*   Updated: 2021/05/12 20:16:02 by mleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,14 +89,9 @@ static char	*get_line(char **file_buffer, char *newline)
 	}
 	else
 	{
-		if (ft_strlen(*file_buffer) == 0)
-			line = NULL;
-		else
-		{
-			line = ft_substr(*file_buffer, 0, ft_strlen(*file_buffer));
-			if (!line)
-				return (NULL);
-		}
+		line = ft_substr(*file_buffer, 0, ft_strlen(*file_buffer));
+		if (!line)
+			return (NULL);
 		free(*file_buffer);
 		*file_buffer = NULL;
 	}
@@ -124,9 +119,9 @@ int	get_next_line(int fd, char **line)
 	if (code < 0)
 		return (code);
 	*line = get_line(&file_buffers, newline);
-	if (code == 0 && !line)
-		return (0);
 	if (!*line)
 		return (-1);
+	if (code == 0)
+		return (0);
 	return (1);
 }

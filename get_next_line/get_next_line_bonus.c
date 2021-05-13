@@ -6,7 +6,7 @@
 /*   By: mleblanc <mleblanc@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/08 20:11:44 by mleblanc          #+#    #+#             */
-/*   Updated: 2021/05/12 18:51:25 by mleblanc         ###   ########.fr       */
+/*   Updated: 2021/05/12 19:52:19 by mleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ int	get_next_line(int fd, char **line)
 	if (code < 0)
 		return (code);
 	*line = get_line(&file_buffers[fd], newline);
-	if (code == 0 && !line)
+	if (code == 0 && !*line)
 		return (0);
 	if (!*line)
 		return (-1);
