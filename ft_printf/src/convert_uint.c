@@ -6,7 +6,7 @@
 /*   By: mleblanc <mleblanc@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 18:53:44 by mleblanc          #+#    #+#             */
-/*   Updated: 2021/05/24 20:38:31 by mleblanc         ###   ########.fr       */
+/*   Updated: 2021/05/24 20:47:43 by mleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ bool	convert_uint(t_pinfo *info, char *base, char *prefix, t_convert conv)
 	if (conv == octal && info->flags & F_HASH)
 		adjust_precision(nb, info);
 	str = ft_ultoa_base(nb, base);
-	if (info->flags & F_PRECISION && conv != octal && info->flags & F_HASH)
+	if (info->flags & F_PRECISION && conv != octal && !(info->flags & F_HASH))
 		info->flags &= ~F_ZEROPAD;
 	pad_char = get_pad_char(info);
 	precision_is_0 = (info->flags & F_PRECISION) && (info->precision == 0);
