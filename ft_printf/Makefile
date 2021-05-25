@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mleblanc <mleblanc@student.42quebec.com    +#+  +:+       +#+         #
+#    By: mleblanc <mleblanc@student.42quebec>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/14 19:00:56 by mleblanc          #+#    #+#              #
-#    Updated: 2021/05/22 18:30:47 by mleblanc         ###   ########.fr        #
+#    Updated: 2021/05/24 15:52:42 by mleblanc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,7 @@ CP			=	cp
 NORMINETTE	=	norminette
 
 
-$(SRC)/%.o:	$(SRC)/%.c
+%.o:		%.c
 			$(CC) $(CFLAGS) -c $< -o $@ -I$(INC) -I$(LIBFT_INC)
 
 $(NAME):	$(OBJS)
@@ -43,9 +43,11 @@ $(NAME):	$(OBJS)
 
 norme:
 			$(MAKELIBFT) norme
-			$(NORMINETTE) $(SRCS) $(addprefix $(INC)/, $(HFILES))
+			$(NORMINETTE) $(SRCS) $(addprefix $(INC)/, $(HFILES)) include/flags.h
 
 all:		$(NAME)
+
+bonus:		all
 
 clean:
 			$(MAKELIBFT) clean
@@ -57,4 +59,4 @@ fclean:		clean
 
 re:			fclean all
 
-.PHONY:		all clean fclean re norme
+.PHONY:		all clean fclean re norme bonus

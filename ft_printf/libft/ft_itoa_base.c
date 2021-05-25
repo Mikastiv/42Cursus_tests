@@ -6,7 +6,7 @@
 /*   By: mleblanc <mleblanc@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 00:32:01 by mleblanc          #+#    #+#             */
-/*   Updated: 2021/05/16 02:08:56 by mleblanc         ###   ########.fr       */
+/*   Updated: 2021/05/23 12:16:08 by mleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,19 +25,20 @@ static size_t	ft_numlen(int num, int base)
 	return (len + 1);
 }
 
-static void	ft_ntoa(char *buf, long n, const char *base, size_t len)
+static void	ft_ntoa(char *buf, int n, const char *base, size_t len)
 {
-	size_t	base_len;
+	int	base_len;
+	int	i;
 
 	base_len = ft_strlen(base);
 	if (n < 0)
-	{
 		*buf++ = '-';
-		n *= -1;
-	}
 	while (len > 0)
 	{
-		buf[--len] = base[n % base_len];
+		i = n % base_len;
+		if (i < 0)
+			i *= -1;
+		buf[--len] = base[i];
 		n /= base_len;
 	}
 }
@@ -57,6 +58,6 @@ char	*ft_itoa_base(int n, const char *base)
 	ret = (char *)ft_calloc(size, sizeof(char));
 	if (!ret)
 		return (NULL);
-	ft_ntoa(ret, (long)n, base, len);
+	ft_ntoa(ret, n, base, len);
 	return (ret);
 }

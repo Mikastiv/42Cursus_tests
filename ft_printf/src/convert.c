@@ -6,7 +6,7 @@
 /*   By: mleblanc <mleblanc@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 14:10:20 by mleblanc          #+#    #+#             */
-/*   Updated: 2021/05/22 18:47:26 by mleblanc         ###   ########.fr       */
+/*   Updated: 2021/05/24 20:00:34 by mleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,13 @@ bool	convert(const char **fmt, t_pinfo *info)
 	else if ((**fmt == 'd' || **fmt == 'i') && (*fmt)++)
 		return (convert_int(info));
 	else if (**fmt == 'u' && (*fmt)++)
-		return (convert_uint(info, "0123456789"));
+		return (convert_uint(info, "0123456789", "", u_integer));
 	else if (**fmt == 'x' && (*fmt)++)
-		return (convert_uint(info, "0123456789abcdef"));
+		return (convert_uint(info, "0123456789abcdef", "0x", lower_hex));
 	else if (**fmt == 'X' && (*fmt)++)
-		return (convert_uint(info, "0123456789ABCDEF"));
+		return (convert_uint(info, "0123456789ABCDEF", "0X", upper_hex));
+	else if (**fmt == 'o' && (*fmt)++)
+		return (convert_uint(info, "01234567", "", octal));
 	else if (**fmt == '%' && (*fmt)++)
 		return (convert_percent(info));
 	else

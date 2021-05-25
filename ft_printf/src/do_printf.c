@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   do_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mleblanc <mleblanc@student.42quebec.com    +#+  +:+       +#+        */
+/*   By: mleblanc <mleblanc@student.42quebec>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/14 20:36:48 by mleblanc          #+#    #+#             */
-/*   Updated: 2021/05/22 21:17:01 by mleblanc         ###   ########.fr       */
+/*   Updated: 2021/05/24 15:37:58 by mleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,12 @@ static void	get_flags(const char **fmt, t_pinfo *info)
 			info->flags |= F_ZEROPAD;
 		else if (**fmt == '-')
 			info->flags |= F_LEFTALIGN;
+		else if (**fmt == ' ')
+			info->flags |= F_SPACE;
+		else if (**fmt == '#')
+			info->flags |= F_HASH;
+		else if (**fmt == '+')
+			info->flags |= F_PLUS;
 		else
 			break ;
 		(*fmt)++;
@@ -76,6 +82,15 @@ static void	get_precision(const char **fmt, t_pinfo *info)
 	}
 }
 
+static void	get_length(const char **fmt, t_pinfo *info)
+{
+	if (**fmt == 'l')
+	{
+		info->flags |= F_LONG;
+		(*fmt)++;
+	}
+}
+
 int	do_printf(const char *fmt, t_pinfo *info)
 {
 	bool	error;
@@ -94,8 +109,11 @@ int	do_printf(const char *fmt, t_pinfo *info)
 		get_flags(&fmt, info);
 		get_width(&fmt, info);
 		get_precision(&fmt, info);
+		get_length(&fmt, info);
 		if (!convert(&fmt, info) || info->count < 0)
 			error = true;
+		if (error)
+			break ;
 	}
 	if (error)
 		return (-1);
