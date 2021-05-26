@@ -11,7 +11,7 @@
 int	main(void)
 {
 	int	res1, res2;
-	const wchar_t *wstr = L"aaaaaâêḑaaaaa😄";
+	const wchar_t *wstr = L"aaaaaâêḑaaaaa😄✵";
 	const char *str = "Hello World!";
 
 	setlocale(LC_ALL, "");
@@ -41,5 +41,11 @@ int	main(void)
 	ft_printf("F: %d, C: %d\n", res1, res2);
 	res1 = ft_printf("%.18ls|\n", wstr);
 	res2 = printf("%.18ls|\n", wstr);
+	ft_printf("F: %d, C: %d\n", res1, res2);
+	res1 = ft_printf("%.21ls|\n", wstr);
+	res2 = printf("%.21ls|\n", wstr);
+	ft_printf("F: %d, C: %d\n", res1, res2);
+	res1 = ft_printf("%.22ls|\n", wstr);
+	res2 = printf("%.22ls|\n", wstr);
 	ft_printf("F: %d, C: %d\n", res1, res2);
 }
