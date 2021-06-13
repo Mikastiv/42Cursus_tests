@@ -151,6 +151,10 @@ bool	test_memchr(void)
 	p = ft_memchr(buf, 3, 10);
 	if (p != memchr(buf, 3, 10))
 		return (false);
+
+	p = ft_memchr(buf, 3 + 256, 10);
+	if (p != memchr(buf, 3 + 256, 10))
+		return (false);
 	return (true);
 }
 
@@ -284,6 +288,9 @@ bool	test_strchr(void)
 
 	if (ft_strchr("", '!') != strchr("", '!'))
 		return (false);
+
+	if (ft_strchr(str, 'H' + 256) != strchr(str, 'H' + 256))
+		return (false);
 	return (true);
 }
 
@@ -304,6 +311,9 @@ bool	test_strrchr(void)
 		return (false);
 
 	if (ft_strrchr("", 'H') != strrchr("", 'H'))
+		return (false);
+
+	if (ft_strrchr(str, 'H' + 256) != strrchr(str, 'H' + 256))
 		return (false);
 	
 	return (true);
