@@ -648,6 +648,8 @@ bool	test_split(void)
 {
 	char	*str = " Hello World Split This Big String    Please I Beg You";
 	char	*ans1[] = { "Hello", "World", "Split", "This", "Big", "String", "Please", "I", "Beg", "You" };
+	char	*str2 = " Hello World Split This Big String    Please I Beg You ";
+	char	*ans2[] = { "Hello", "World", "Split", "This", "Big", "String", "Please", "I", "Beg", "You" };
 	char 	**split;
 	size_t	i;
 
@@ -659,6 +661,23 @@ bool	test_split(void)
 			return (false);
 		i++;
 	}
+	if (i != 10)
+		return (false);
+	i = 0;
+	while (split[i])
+		free(split[i++]);
+	free(split);
+
+	split = ft_split(str2, ' ');
+	i = 0;
+	while (split[i] != NULL)
+	{
+		if (strcmp(split[i], ans2[i]) != 0)
+			return (false);
+		i++;
+	}
+	if (i != 10)
+		return (false);
 	i = 0;
 	while (split[i])
 		free(split[i++]);
