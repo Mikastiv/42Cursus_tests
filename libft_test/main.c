@@ -861,7 +861,6 @@ bool	test_lstclear(void)
 		return (false);
 	node1 = NULL;
 	ft_lstclear(&node1, free);
-	ft_lstclear(NULL, free);
 	return (true);
 }
 
