@@ -799,10 +799,22 @@ bool	test_lstadd_front(void)
 bool	test_lstadd_back(void)
 {
 	t_list	*lst = NULL;
+	t_list	*lst1 = NULL;
 
 	ft_lstadd_back(&lst, ft_lstnewone("Hello"));
 	ft_lstadd_back(&lst, ft_lstnewone("World"));
 	ft_lstadd_back(&lst, ft_lstnewone("!"));
+	if (strcmp(lst->content, "Hello") != 0 
+		|| strcmp(lst->next->content, "World") != 0
+		|| strcmp(lst->next->next->content, "!") != 0
+		|| lst->next->next->next)
+		return (false);
+
+	lst = NULL;
+	ft_lstadd_back(&lst, ft_lstnewone("Hello"));
+	ft_lstadd_back(&lst1, ft_lstnewone("World"));
+	ft_lstadd_back(&lst1, ft_lstnewone("!"));
+	ft_lstadd_back(&lst, lst1);
 	if (strcmp(lst->content, "Hello") != 0 
 		|| strcmp(lst->next->content, "World") != 0
 		|| strcmp(lst->next->next->content, "!") != 0
