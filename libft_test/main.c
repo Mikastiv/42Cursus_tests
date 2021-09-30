@@ -87,37 +87,6 @@ bool	test_memcpy(void)
 	return (true);
 }
 
-bool	test_memccpy(void)
-{
-	char	buf[1024];
-	char	buf2[1024];
-	char	*end;
-	char	*p;
-	char	*p2;
-
-	end = buf + sizeof(buf);
-	p = ft_memccpy(buf, "Hello ", '\0', sizeof(buf));
-	p2 = memccpy(buf2, "Hello ", '\0', sizeof(buf2));
-	if (p)
-	{
-		p = ft_memccpy(p - 1, "", '\0', end - p);
-		p2 = memccpy(p2 - 1, "", '\0', end - p2);
-	}
-	if (p)
-	{
-		p = ft_memccpy(p - 1, "world", '\0', end - p);
-		p2 = memccpy(p2 - 1, "world", '\0', end - p2);
-	}
-	if (p)
-	{
-		p = ft_memccpy(p - 1, "!!!", '\0', end - p);
-		p2 = memccpy(p2 - 1, "!!!", '\0', end - p2);
-	}
-	if (strcmp(buf, buf2) != 0)
-		return (false);
-	return (true);
-}
-
 bool	test_memmove(void)
 {
 	const char	src[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
@@ -189,9 +158,9 @@ bool	test_memcmp(void)
 
 bool	test_strlen(void)
 {
-	char	*str1 = "Hello World!";
-	char	*str2 = "Ddgd dfg adjk\t\\ fdkd f\n ssd qwey45 ";
-	char	*str3 = "";
+	const char	*str1 = "Hello World!";
+	const char	*str2 = "Ddgd dfg adjk\t\\ fdkd f\n ssd qwey45 ";
+	const char	*str3 = "";
 
 	if (ft_strlen(str1) != strlen(str1))
 		return (false);
@@ -215,7 +184,8 @@ bool	test_is_x(int (*ft)(int), int (*c_ft)(int))
 	{
 		res1 = (*ft)(c);
 		res2 = (*c_ft)(c++);
-		if ((res1 && !res2) || (!res1 && res2))
+		printf("%d %d\n", res1, res2);
+		if (res1 != res2)
 			return (false);
 	}
 	return (true);
@@ -1039,7 +1009,6 @@ int	main(void)
 	failed += !test(test_memset, "memset");
 	failed += !test(test_bzero, "bzero");
 	failed += !test(test_memcpy, "memcpy");
-	failed += !test(test_memccpy, "memccpy");
 	failed += !test(test_memmove, "memmove");
 	failed += !test(test_memchr, "memchr");
 	failed += !test(test_memcmp, "memcmp");
